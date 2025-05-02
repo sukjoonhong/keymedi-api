@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 
 /**
- * 딜러 각각은 member 와 자식관계에 있으며 딜러: member 는 1:N
+ * 딜러 각각은 member 와 자식관계에 있으며 딜러: member 는 N:1
  */
 @Entity
 @Table(
