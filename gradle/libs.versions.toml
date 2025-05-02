@@ -1,0 +1,60 @@
+[versions]
+kotlin = "1.9.21"
+kotlinx-coroutines = "1.7.3"
+spring-boot-gradle-plugin = "3.1.4"
+spring-dependency = "1.1.4"
+
+kotest = "5.8.0"
+
+
+[libraries]
+kotlin-jvm-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-allopen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
+kotlin-noarg = { module = "org.jetbrains.kotlin:kotlin-noarg", version.ref = "kotlin" }
+kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+spring-boot-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot-gradle-plugin" }
+spring-dependency-management-plugin = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "spring-dependency" }
+de-thetaphi-forbiddenapis = { module = "de.thetaphi:forbiddenapis", version = "3.8" }
+
+kotlin-logging = { module = "io.github.microutils:kotlin-logging-jvm", version = "3.0.5" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+
+logback-core = { module = "ch.qos.logback:logback-core", version = "1.4.14" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.4.14" }
+logback = { module = "net.logstash.logback:logstash-logback-encoder", version = "7.4" }
+
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version = "2.16.0" }
+jackson-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version = "2.16.0" }
+jjwt = { module = "io.jsonwebtoken:jjwt", version = "0.12.5" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version = "0.12.5"}
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version = "0.12.5"}
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version = "0.12.5"}
+bouncy-castle = { module = "org.bouncycastle:bcprov-jdk15on", version = "1.70"}
+swagger-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "2.2.0" }
+
+kotest-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property-jvm", version.ref = "kotest" }
+kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version = "1.1.2" }
+kotest-dataset = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+mockk = { module = "io.mockk:mockk", version = "1.13.4" }
+springmockk = { module = "com.ninja-squad:springmockk", version = "3.1.2" }
+
+[bundles]
+plugin-build-classpath = [
+    "kotlin-jvm-plugin", "kotlin-serialization-plugin", "kotlin-allopen", "kotlin-noarg",
+    "spring-boot-plugin", "spring-dependency-management-plugin", "de-thetaphi-forbiddenapis",
+]
+
+app-deps = [
+    "kotlin-logging",
+    "logback-core", "logback-classic", "logback",
+    "jackson-kotlin", "jackson-jsr310", "jjwt", "jjwt-api", "jjwt-impl", "jjwt-jackson",
+    "bouncy-castle", "swagger-ui",
+]
+
+test = [
+    "kotest-runner", "kotest-assertions", "kotest-property", "kotest-extensions-spring", "kotest-dataset",
+    "mockk", "springmockk",
+    "kotlinx-coroutines-test"
+]

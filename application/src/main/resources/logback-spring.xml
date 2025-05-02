@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <springProperty scope="context" name="profile" source="spring.profiles.active"/>
+
+    <springProfile name="local">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) --- [ %thread{10} ] %cyan(%class{36}:%line.%method) : %msg%n
+                </pattern>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/tmp/log/keymedi/keymedi-api.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 로그 파일 패턴: 날짜 추가 -->
+                <fileNamePattern>/tmp/log/keymedi/keymedi-api.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 로그 보관 기간 설정 (예: 최근 30일치만 유지) -->
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [ %thread{10} ] %class{36}.%method:%line -
+                    %msg%n
+                </pattern>
+            </encoder>
+        </appender>
+
+        <root level="DEBUG">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+        <!-- ALL > TRACE > DEBUG > INFO > WARN > ERROR > OFF -->
+        <logger name="com.keymedi" level="INFO"/>
+
+        <logger name="software.amazon.awssdk.profiles.internal.ProfileFileReader" level="ERROR"/>
+        <logger name="com.amazonaws.auth.profile.internal.BasicProfileConfigLoader" level="ERROR"/>
+    </springProfile>
+
+
+    <!-- Framework Category -->
+    <logger name="org.apache" level="WARN"/>
+
+    <logger name="org.springframework" level="WARN"/>
+
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.type" level="DEBUG"/>
+    <logger name="org.hibernate.engine.query" level="DEBUG"/>
+    <logger name="org.hibernate.jdbc" level="DEBUG"/>
+
+    <logger name="software.amazon.awssdk.profiles.internal.ProfileFileReader" level="ERROR"/>
+    <logger name="com.amazonaws.auth.profile.internal.BasicProfileConfigLoader" level="ERROR"/>
+</configuration>
