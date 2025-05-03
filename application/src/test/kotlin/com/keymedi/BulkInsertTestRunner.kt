@@ -6,10 +6,12 @@ import com.keymedi.domain.PrescriptionStatus
 import com.keymedi.domain.entity.postgresql.*
 import com.keymedi.domain.entity.postgresql.Member.MarketingAgreement
 import com.keymedi.repo.postgresql.*
+import com.keymedi.security.RsaUtil
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import kotlin.random.Random
 
@@ -25,6 +27,7 @@ class BulkInsertWithRepositoryTest @Autowired constructor(
     private val productIngredientRepository: ProductIngredientRepository,
     private val productReferenceRepository: ProductReferenceRepository,
     private val prescriptionRepository: PrescriptionRepository,
+    private val rsaUtil: RsaUtil,
 ) : StringSpec({
 
     "insert dummy data using repositories" {
@@ -42,7 +45,7 @@ class BulkInsertWithRepositoryTest @Autowired constructor(
                     authId = "user$it",
                     name = "사용자$it",
                     nickname = "닉네임$it",
-                    password = "pass$it",
+                    password = BCryptPasswordEncoder().encode("pass$it"),
                     phoneNumber = "0100000$it",
                     email = "user$it@test.com",
                     marketingAgreement = MarketingAgreement(push = true, sms = true, email = false),

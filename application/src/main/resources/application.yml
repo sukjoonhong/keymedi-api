@@ -1,5 +1,8 @@
 server:
-  port: 18011
+  port: 18080
+
+jwt:
+  secret: mRB9tQ5U97Euv6L4qvA8pFpliywPfWhxEKhAd1qXkXg= #TODO: 추후 빼야 함
 
 spring:
   jpa:

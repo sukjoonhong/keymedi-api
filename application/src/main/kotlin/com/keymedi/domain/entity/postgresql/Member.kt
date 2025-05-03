@@ -23,6 +23,7 @@ data class Member(
     val authId: String,
     val name: String,
     val nickname: String,
+
     val password: String,
     val phoneNumber: String,
     val email: String,
