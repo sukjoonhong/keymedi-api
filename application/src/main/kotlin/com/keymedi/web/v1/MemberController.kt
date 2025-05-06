@@ -40,6 +40,7 @@ class MemberController(
     }
 
     @PatchMapping("/{userId}/nickname")
+    @Operation(summary = "닉네임 변경")
     fun updateNickname(
         @PathVariable userId: String,
         @RequestParam nickname: String,
