@@ -49,7 +49,7 @@ class JwtService(
         return try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token)
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }

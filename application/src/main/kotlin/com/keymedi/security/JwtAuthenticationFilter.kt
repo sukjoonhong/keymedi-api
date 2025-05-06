@@ -19,7 +19,7 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val token = extractTokenFromHeaderOrCookie(request)
+        val token = extractTokenFromHeader(request)
 
         if (token != null && jwtService.validateToken(token)) {
             val userId = jwtService.getUserId(token)
@@ -31,13 +31,13 @@ class JwtAuthenticationFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun extractTokenFromHeaderOrCookie(request: HttpServletRequest): String? {
+    private fun extractTokenFromHeader(request: HttpServletRequest): String? {
         val header = request.getHeader(HttpHeaders.AUTHORIZATION)
-        if (header != null && header.startsWith(BEARER_PREFIX)) {
-            return header.substring(7)
+        return if (header != null && header.startsWith(BEARER_PREFIX)) {
+            header.substring(7)
+        } else {
+            null
         }
-
-        return request.cookies?.firstOrNull { it.name == "AUTH_TOKEN" }?.value
     }
 
     companion object {
