@@ -1,18 +1,15 @@
 package com.keymedi.web.v1
 
-import com.keymedi.domain.model.LoginRequest
-import com.keymedi.security.JwtAuthenticationFilter
-import com.keymedi.security.JwtAuthenticationFilter.Companion.KEYMEDI_CUSTOM_HEADER
+import com.keymedi.domain.model.request.LoginRequest
+import com.keymedi.domain.model.request.RefreshTokenRequest
+import com.keymedi.domain.model.response.LoginResponse
 import com.keymedi.service.AuthService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletResponse
+import mu.KLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -24,16 +21,50 @@ class AuthController(
     @Operation(summary = "로그인")
     fun login(
         @RequestBody request: LoginRequest,
-        response: HttpServletResponse
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<LoginResponse> {
         return try {
-            val accessToken = authService.login(request)
-            response.setHeader(KEYMEDI_CUSTOM_HEADER, accessToken)
-            val cookie = JwtAuthenticationFilter.genAuthCookie(accessToken)
-            response.addCookie(cookie)
-            ResponseEntity.ok().build()
+            val loginResponse = authService.login(request)
+            ResponseEntity.ok(loginResponse)
         } catch (_: Exception) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
     }
+
+    @PostMapping("/token/refresh")
+    @Operation(summary = "AccessToken 재발급")
+    fun refreshToken(@RequestBody request: RefreshTokenRequest): ResponseEntity<LoginResponse> {
+        return try {
+            val response = authService.refreshToken(request.userId, request.refreshToken)
+            ResponseEntity.ok(response)
+        } catch (_: Exception) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        }
+    }
+
+    @GetMapping("/public-key")
+    @Operation(summary = "암호화용 공개키")
+    fun getPublicKey(): ResponseEntity<Map<String, String>> {
+        return ResponseEntity.ok(mapOf("publicKey" to authService.getPublicKey()))
+    }
+
+    @PostMapping("/verification-code/send/{userId}")
+    @Operation(summary = "휴대폰 인증번호 전송")
+    fun sendVerificationCode(
+        @PathVariable userId: String,
+    ) {
+        //TODO: not implemented
+        logger.info("Sending verification code")
+    }
+
+    @PostMapping("/verification-code/verify/{userId}")
+    @Operation(summary = "휴대폰 인증번호 확인")
+    fun verifyCode(
+        @PathVariable userId: String,
+        @RequestParam verificationCode: Int,
+    ): Boolean {
+        //TODO: not implemented
+        return true
+    }
+
+    companion object : KLogging()
 }

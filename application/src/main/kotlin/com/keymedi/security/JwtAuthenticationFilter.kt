@@ -1,8 +1,6 @@
 package com.keymedi.security
 
-import com.keymedi.utils.TimeUnit
 import jakarta.servlet.FilterChain
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
@@ -28,14 +26,6 @@ class JwtAuthenticationFilter(
 
             val authentication = UsernamePasswordAuthenticationToken(userId, null, emptyList())
             SecurityContextHolder.getContext().authentication = authentication
-
-            if (jwtService.isTokenExpiringSoon(token)) {
-                val newToken = jwtService.generateAccessToken(userId)
-                response.setHeader(KEYMEDI_CUSTOM_HEADER, newToken)
-
-                val cookie = genAuthCookie(newToken)
-                response.addCookie(cookie)
-            }
         }
 
         filterChain.doFilter(request, response)
@@ -52,15 +42,5 @@ class JwtAuthenticationFilter(
 
     companion object {
         const val BEARER_PREFIX = "Bearer "
-        const val KEYMEDI_CUSTOM_HEADER = "Keymedi-Token"
-
-        fun genAuthCookie(authToken: String): Cookie {
-            return Cookie("AUTH_TOKEN", authToken).apply {
-                path = "/"
-                isHttpOnly = true
-                secure = true
-                maxAge = TimeUnit.MINUTE.toSeconds(30).toInt()
-            }
-        }
     }
 }

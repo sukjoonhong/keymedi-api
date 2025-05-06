@@ -15,11 +15,11 @@ class JwtService(
 ) {
     private val key: SecretKey = Keys.hmacShaKeyFor(secretKey.toByteArray())
 
-    fun generateAccessToken(authId: String): String {
-        val claims = Jwts.claims().subject(authId.toString()).build()
+    fun generateAccessToken(userId: String): String {
+        val claims = Jwts.claims().subject(userId.toString()).build()
         return Jwts.builder()
             .claims(claims)
-            .subject(authId)
+            .subject(userId)
             .issuedAt(Date())
             .expiration(Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
             .signWith(key)
@@ -36,9 +36,9 @@ class JwtService(
     }
 
     // Refresh Token 생성
-    fun generateRefreshToken(authId: String): String {
+    fun generateRefreshToken(userId: String): String {
         return Jwts.builder()
-            .subject(authId)
+            .subject(userId)
             .issuedAt(Date())
             .expiration(Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
             .signWith(key)

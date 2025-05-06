@@ -7,11 +7,11 @@ import jakarta.persistence.*
 @Table(
     name = "member",
     uniqueConstraints = [
-        UniqueConstraint(name = "uq__member__auth_id", columnNames = ["auth_id"]),
+        UniqueConstraint(name = "uq__member__user_id", columnNames = ["user_id"]),
         UniqueConstraint(name = "uq__member__nickname", columnNames = ["nickname"])
     ],
     indexes = [
-        Index(name = "idx__member__auth_id", columnList = "auth_id")
+        Index(name = "idx__member__user_id", columnList = "user_id")
     ]
 )
 data class Member(
@@ -19,15 +19,16 @@ data class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(name = "auth_id", nullable = false)
-    val authId: String,
+    @Column(name = "user_id", nullable = false)
+    val userId: String,
     val name: String,
-    val nickname: String,
+    val nickname: String? = null,
 
     val password: String,
     val phoneNumber: String,
     val email: String,
-    val recommenderCode: String? = null,
+    val referralCode: String? = null,
+    val csoFilePath: String? = null,
     val deleted: Boolean = false,
 
     @Column(nullable = false)

@@ -23,6 +23,8 @@ class WebSecurityConfig(
         .csrf { it.disable() }
         .authorizeHttpRequests {
             it.requestMatchers(
+                "/swagger-ui/**", //TODO: 운영 배포시 제거
+                "/api-docs/**", //TODO: 운영 배포시 제거
                 "/v1/auth/login",
             ).permitAll()
             it.anyRequest().authenticated()

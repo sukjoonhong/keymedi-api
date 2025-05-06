@@ -12,6 +12,7 @@ import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import kotlin.random.Random
 
@@ -27,7 +28,8 @@ class BulkInsertWithRepositoryTest @Autowired constructor(
     private val productIngredientRepository: ProductIngredientRepository,
     private val productReferenceRepository: ProductReferenceRepository,
     private val prescriptionRepository: PrescriptionRepository,
-    private val rsaUtil: RsaUtil,
+    private val termsRepository: TermsRepository,
+    private val passwordEncoder: PasswordEncoder
 ) : StringSpec({
 
     "insert dummy data using repositories" {
@@ -42,10 +44,10 @@ class BulkInsertWithRepositoryTest @Autowired constructor(
         val members = (1..10).map {
             memberRepository.save(
                 Member(
-                    authId = "user$it",
+                    userId = "user$it",
                     name = "사용자$it",
                     nickname = "닉네임$it",
-                    password = BCryptPasswordEncoder().encode("pass$it"),
+                    password = passwordEncoder.encode("pass$it"),
                     phoneNumber = "0100000$it",
                     email = "user$it@test.com",
                     marketingAgreement = MarketingAgreement(push = true, sms = true, email = false),
@@ -143,6 +145,35 @@ class BulkInsertWithRepositoryTest @Autowired constructor(
                     )
                 }
             }
+
+        termsRepository.saveAll(
+            listOf(
+                Terms(
+                    version = "v1.0",
+                    title = "이용약관 v1.0",
+                    content = """
+                <html>
+                <body>
+                    <h1>이용약관 v1.0</h1>
+                    <p>본 약관은 v1.0입니다.</p>
+                </body>
+                </html>
+            """.trimIndent()
+                ),
+                Terms(
+                    version = "v2.0",
+                    title = "이용약관 v2.0",
+                    content = """
+                <html>
+                <body>
+                    <h1>이용약관 v2.0</h1>
+                    <p>본 약관은 최신 버전 v2.0입니다.</p>
+                </body>
+                </html>
+            """.trimIndent()
+                )
+            )
+        )
 
         memberRepository.count() shouldBe 10
         productRepository.count() shouldBe 100

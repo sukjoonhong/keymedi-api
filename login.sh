@@ -4,18 +4,17 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PUBLIC_KEY_PATH="$SCRIPT_DIR/application/src/main/resources/public_key.pem"
 
-AUTH_ID="user1"
+# 사용자 정보
+USER_ID="user1"
 PASSWORD="pass1"
 
-# RSA 암호화 후 base64 인코딩
-ENCRYPTED_PASSWORD=$(echo -n "$PASSWORD" | openssl rsautl -encrypt -pubin -inkey "$PUBLIC_KEY_PATH" | base64)
-
+# JSON 생성
 JSON=$(jq -n \
-  --arg authId "$AUTH_ID" \
-  --arg password "$ENCRYPTED_PASSWORD" \
-  '{authId: $authId, password: $password}'
-)
+  --arg userId "$USER_ID" \
+  --arg password "$PASSWORD" \
+  '{userId: $userId, password: $password}')
 
+# 요청 전송
 curl -X POST http://localhost:18080/v1/auth/login \
   -H "Content-Type: application/json" \
   -d "$JSON" \
