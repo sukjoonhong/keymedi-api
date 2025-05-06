@@ -26,6 +26,8 @@ class WebSecurityConfig(
                 "/swagger-ui/**", //TODO: 운영 배포시 제거
                 "/api-docs/**", //TODO: 운영 배포시 제거
                 "/v1/auth/login",
+                "/v1/auth/token/refresh",
+                "/v1/auth/public-key"
             ).permitAll()
             it.anyRequest().authenticated()
         }
