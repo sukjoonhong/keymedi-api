@@ -8,5 +8,5 @@ buildscript {
     }
 }
 
-group = "com.keymedi"
+group = "co.kr.medipanda.portal"
 version = "0.0.1-SNAPSHOT"
